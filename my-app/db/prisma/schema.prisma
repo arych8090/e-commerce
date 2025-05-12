@@ -1,0 +1,109 @@
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  userid String @unique
+  email String @unique
+  phonenumber String @unique
+  password String
+  provider String
+  orders Order[]
+  address Address[]
+  intersection  Typeinterection[]
+}
+
+model Order {
+  id Int @id @default(autoincrement())
+  Orderid String @unique
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userid] , references: [id])
+  userid Int 
+  product Products[]
+  status Status
+}
+
+model Products{
+  id Int @id @default(autoincrement())
+  productid String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name String 
+  price Int 
+  imageurl String @unique
+  AboutProduct String
+  Interations Int
+  Rating String
+  Stock Int
+  Bought Int
+  Discount String
+  order Order[] 
+  Provider Provider @relation(fields: [providerid] , references: [id])
+  providerid Int
+  types typeunit @relation(fields: [typeid] , references: [id])
+  typeid Int
+}
+
+model typeunit{
+  id Int @id @default(autoincrement())
+  typename String @unique
+  products Products[]
+  interections Typeinterection[]
+}
+
+model Typeinterection{
+  user User @relation(fields: [userid] , references: [id])
+  userid Int
+  type typeunit @relation(fields: [typeid] , references: [id])
+  typeid Int
+  count Int @default(0)
+  @@id([userid,typeid])
+}
+
+model Address{
+  id Int @id @default(autoincrement())
+  Address String @unique
+  Type type
+  User User[]
+}
+
+model Provider{
+  id Int @id @default(autoincrement())
+  providerid String @unique
+  products Products[]
+  email String @unique
+  phonenumber String @unique
+  finance Finance? @relation(fields: [financeid] , references: [id])
+  financeid Int @unique
+}
+
+model Finance{
+  id Int @id @default(autoincrement())
+  totalexpense Int
+  totalincome Int
+  totalrevenue Int
+  totalloss Int
+  productsell Int
+  productleft  Int
+  provider Provider?
+}
+
+enum Status {
+  InProgress 
+  Sucessful
+  Failed
+}
+
+enum type {
+  Home 
+  Work
+  Other
+}
