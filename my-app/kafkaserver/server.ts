@@ -16,6 +16,6 @@ admin.createTopics({
 		configEntries:[
 			{name:"retention.ms" , value:"604800000"},
 			{name:"segement.bytes" , value:"524288000"}]
-	}]});
+		 }]});
 
 export {kafka}

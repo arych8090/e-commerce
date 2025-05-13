@@ -8,7 +8,7 @@ const userschema= new Schema("User" , {
 });
 
 const ProductSchema = new Schema("Product" , {
-    product : {type:'string'},
+    productid : {type:'string'},
     productname : {type:'string'},
     productType : {type:"string" ,  sortable:true},
     productSubtypes : {type:'string[]' , sortable:true },
@@ -32,7 +32,7 @@ const orderschema = new Schema("Orders" , {
 });
 
 const typeschema = new Schema("types" , {
-    types : {type:'string'},  //remember to create the manuall enums and connected to this
+    type : {type:'string'},  //remember to create the manuall enums and connected to this
     subtypes : {type:'string[]'  ,  sortable:true}
 });
 
@@ -63,7 +63,7 @@ const FinanceSchema = new Schema("finance" , {
     totalrevenue : {type:'number' , sortable:true},
     totalloss : {type:'number' ,  sortable:true},
     perproductsprice : {type:'string[]' , sortable:true},
-    toatalproductprice : {type:'string[]', sortable:true},
+    totalproductprice : {type:'string[]', sortable:true},
     productinventory : {type:'string[]' ,  sortable:true},
     productsell : {type:'string[]' , sortable:true}
 });
