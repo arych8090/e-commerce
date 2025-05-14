@@ -9,14 +9,14 @@ const app = express();
 
 const gateway =  new ApolloGateway({
         serviceList:[
-                {name:"user" , url:"http://localhost:4001/graphsql"},
-                {name:"product" , url:"http://localhost:4002/graphsql"},
-                {name:"orders" , url:"http://localhost:4003/graphsql"},
-                {name:"interections" , url:"http://localhost:4004/graphsql"},
-                {name:"typeinterections" , url:"http://localhost:4005/graphsql"},
-                {name:"types" , url:"http://localhost:4006/graphsql"},
-                {name:"provider" , url:"http://localhost:4007/graphsql"},
-                {name:"finance" , url:"http://localhost:4008/graphsql"}
+                {name:"user" , url:"http://user-service:4001/graphsql"},
+                {name:"product" , url:"http://product-service:4002/graphsql"},
+                {name:"orders" , url:"http://orders-service:4003/graphsql"},
+                {name:"interections" , url:"http://interections-service:4004/graphsql"},
+                {name:"typeinterections" , url:"http://typeinterections-service:4005/graphsql"},
+                {name:"types" , url:"http://types-service:4006/graphsql"},
+                {name:"provider" , url:"http://provider-service:4007/graphsql"},
+                {name:"finance" , url:"http://finance-service:4008/graphsql"}
         ]
 });
 

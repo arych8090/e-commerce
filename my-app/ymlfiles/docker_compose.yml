@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  ngnix:
+     extends:
+        file: ./ngnix/docker-compose.ngnix.yml
+        service: ngnix
+     depends_on:
+        - graphsql-gateway
+        - email-notifi
+        - pay-stripe
+  kafka1:
+     extends:
+        file: ./kafka/docker-compose.kafka.yml
+        service: kafka1
+  kafka2:
+    extends:
+         file: ./kafka/docker-compose.kafka.yml
+         service: kafka2
+  graphsql-gateway:
+    extends:
+         file: ./graphsql/docker-compose.graphql.yml
+         service: graphsql-gateway
+  email-notifi:
+    extends:
+         file: ./notification/docker-compose.notifi.yml
+         service: email-notifi
+  pay-stripe:
+    extends:
+         file: ./payment/docker-compose.payment.yml
+         service: pay-stripe
+  redis1:
+    extends:
+         file: ./redis/docker-compose.redis.yml
+         service: redis1
+  redis2:
+    extends:
+         file: ./redis/docker-compose.redis.yml
+         service: redis2
+  redis3:
+    extends:
+         file: ./redis/docker-compose.redis.yml
+         service: redis3
+  redis4:
+    extends:
+         file: ./redis/docker-compose.redis.yml
+         service: redis4
+  redis5:
+    extends:
+         file: ./redis/docker-compose.redis.yml
+         service: redis5
+  redis6:
+    extends:
+         file: ./redis/docker-compose.redis.yml
+         service: redis6
+
+network:
+  app-global-network:
+     external:true

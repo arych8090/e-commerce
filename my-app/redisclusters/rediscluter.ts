@@ -2,22 +2,22 @@ import {Redis} from "ioredis";
 
 const redis =  new Redis.Cluster([
     {port:5000 ,
-        host:'localhost'
+        host:'redis1'
     },
     {port:5001 ,
-        host:'localhost'
+        host:'redis2'
     },
     {port:5002 ,
-        host:'localhost'
+        host:'redis3'
     },
     {port:5003 ,
-        host:'localhost'
+        host:'redis4'
     },
     {port:5004 ,
-        host:'localhost'
+        host:'redis5'
     },
     {port:5005 ,
-        host:'localhost'
+        host:'redis6'
     }
 ]);
 

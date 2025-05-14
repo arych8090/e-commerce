@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "start:graphql": "ts-node ./graphsql/server.ts",
+    "start:payment": "ts-node ./paymentserver/server.ts",
+    "start:notification": "ts-node ./notificationAPI/server.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.13.8",
