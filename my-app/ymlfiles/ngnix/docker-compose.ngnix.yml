@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+   ngnix:
+      image: ngnix:latest
+      container_name: ngnix
+      port:
+        - "80:80"
+      volumes:
+        -  ./nginx.conf:/etc/nginx/nginx.conf
+      network:
+        - app-global-network
+      
+network:
+  app-global-network:
+    external:true 

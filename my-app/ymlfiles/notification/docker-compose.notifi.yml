@@ -1,0 +1,20 @@
+version: "3.8"
+
+services: 
+      email-notifi:
+             build: 
+                context: ../..
+                docker: notification/DOCKERFILE 
+             container_name: email-notifi
+             ports :
+               - "6000 : 6000"
+             volumes : 
+               - my-notification-data:/data
+             network:
+               - app-global-network
+volumes:
+  my-notification-data:
+
+network:
+  app-global-network:
+    external:true

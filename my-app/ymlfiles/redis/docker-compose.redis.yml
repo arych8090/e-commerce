@@ -17,6 +17,8 @@ services:
                    --cluster-announce-bus-port 15000
     volumes:
       - redis1-data:/data
+    networks:
+      - app-global-network
 
   redis2:
     image: redis:7.2-alpine
@@ -34,6 +36,9 @@ services:
                    --cluster-announce-bus-port 15001
     volumes:
       - redis2-data:/data
+    networks:
+      - app-global-network
+
 
   redis3:
     image: redis:7.2-alpine
@@ -51,6 +56,9 @@ services:
                    --cluster-announce-bus-port 15002
     volumes:
       - redis3-data:/data
+    networks:
+      - app-global-network
+
 
   redis4:
     image: redis:7.2-alpine
@@ -68,6 +76,9 @@ services:
                    --cluster-announce-bus-port 15003
     volumes:
       - redis4-data:/data
+    networks:
+      - app-global-network
+
 
   redis5:
     image: redis:7.2-alpine
@@ -85,6 +96,9 @@ services:
                    --cluster-announce-bus-port 15004
     volumes:
       - redis5-data:/data
+    networks:
+      - app-global-network
+
 
   redis6:
     image: redis:7.2-alpine
@@ -102,6 +116,9 @@ services:
                    --cluster-announce-bus-port 15005
     volumes:
       - redis6-data:/data
+    networks:
+      - app-global-network
+
 
 volumes:
   redis1-data:
@@ -110,3 +127,7 @@ volumes:
   redis4-data:
   redis5-data:
   redis6-data:
+
+networks:
+    app-global-network:
+       external:true

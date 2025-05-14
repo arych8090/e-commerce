@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  pay-stripe:
+        build: 
+            context: ../..
+            docker: payment/DOCKERFILE
+        container_name: pay-stripe
+        ports:
+          - "7000:7000"
+        volume:
+          - my-payment-data:/data
+        network:
+          - app-global-network 
+volumes:
+  my-payment-data:
+
+network:
+  app-global-network:
+     external:true

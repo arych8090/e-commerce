@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+     graphsql-gateway:
+          build: 
+              context: ../..
+              docker: graphsq/DOCKERFILE
+          container_name: graphsql-gateway
+          port:
+             - "4000:4000"
+          enviroment:
+            - NODE_ENV=developement
+            - PORT=4000
+            - GATEWAY_NAME=MainGateway
+            - SERVICE_USER=http://user-service:4001/graphsql
+            - SERVICE_PRODUCT=http://product-service:4002/graphsql
+            - SERVICE_ORDER=http://orders-service:4003/graphsql
+            - SERVICE_INTERECTIONS=http://interections-service:4004/graphsql
+            - SERVICE_TYPEINTERECTIONS=http://typeinterections-service:4005/graphsql
+            - SERVICE_TYPES=http://types-service:4006/graphsql
+            - SERVICE_PROVIDER=http://provider-service:4007/graphsql
+            - SERVICE_FINANCE=http://finance-service:4008/graphsql
+          network:
+            - app-global-network
+          volumes:
+            - graphsql-gateway-data:/data
+volumes:
+  graphsql-gateway-data:
+
+network:
+  app-global-network:
+      external:true
