@@ -2,7 +2,7 @@ import {Kafka} from "Kafkajs";
 
 const kafka =  new Kafka({
 	clientId :"User",
-	brokers:['localhost:9000']
+	brokers:['localhost:9000' , 'localhost:9001']
 });
 
 const admin = kafka.admin();

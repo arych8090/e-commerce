@@ -2,7 +2,7 @@ import {Redis} from "ioredis";
 import {Client} from "redis-om";
 
 const redis = new Redis("userid" ,{
-    port:8080,
+    port:6379,
     host:"localhost",
     password:"mysupersecret"
 });

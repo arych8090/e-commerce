@@ -18,6 +18,8 @@ type product{
 },
 
 type Query{
+	product(productid : String!):product
+	cart(userid : String!):cart
 },
 
 type Mutation{
