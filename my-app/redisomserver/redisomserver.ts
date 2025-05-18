@@ -1,4 +1,5 @@
 import {Repository, Client ,Schema} from "redis-om";
+import { redisomclient } from "./mainredis";
 
 const userschema= new Schema("User" , {
     username : {type:'string'},
@@ -20,7 +21,9 @@ const ProductSchema = new Schema("Product" , {
     rating : {type:'number' , sortable:true},
     created : {type:'date' , sortable:true},
     updated : {type:'date' , sortable:true},
-    likes : {type:'number' ,  sortable:true}
+    likes : {type:'number' ,  sortable:true},
+    productinterection: {type:'string'},
+    provider : {type:'string'}
 });
 
 const orderschema = new Schema("Orders" , {
@@ -68,17 +71,16 @@ const FinanceSchema = new Schema("finance" , {
     productsell : {type:'string[]' , sortable:true}
 });
 
-const client =  new Client();
-await client.open('redis://localhost:6379');
 
-const UserRepository= client.fetchRepository(userschema)
-const ProviderRepository=client.fetchRepository(providerschema)
-const OrderRepository=client.fetchRepository(orderschema)
-const TypeRepository=client.fetchRepository(typeschema)
-const ProductRepository=client.fetchRepository(ProductSchema)
-const Userinterectrepository=client.fetchRepository(userinterection)
-const typeinteractrepository=client.fetchRepository(typeinterection)
-const FinanceRepository=client.fetchRepository(FinanceSchema)
+
+const UserRepository= redisomclient.fetchRepository(userschema)
+const ProviderRepository=redisomclient.fetchRepository(providerschema)
+const OrderRepository=redisomclient.fetchRepository(orderschema)
+const TypeRepository=redisomclient.fetchRepository(typeschema)
+const ProductRepository=redisomclient.fetchRepository(ProductSchema)
+const Userinterectrepository=redisomclient.fetchRepository(userinterection)
+const typeinteractrepository=redisomclient.fetchRepository(typeinterection)
+const FinanceRepository=redisomclient.fetchRepository(FinanceSchema)
 
 await UserRepository.createIndex();
 await ProviderRepository.createIndex();
