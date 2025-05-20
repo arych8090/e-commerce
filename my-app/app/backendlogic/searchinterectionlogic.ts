@@ -12,7 +12,7 @@ app.post("/interection" , async(req , res)=>{
     const { productid } = req.body;
     const userid = session.user.id;
 
-    const { types, subtypes, price } = await typecall({productid , userid});
+    const { types, subtypes, price } = await typecall({productid});
     
 
     const key = `interection:${userid}`;
@@ -20,11 +20,11 @@ app.post("/interection" , async(req , res)=>{
     const value  =  await redis.hget(key , "types");
     const parse : {types : {name :string , count :number}  , subtypes:{ name : string , count : number}[]}[] = JSON.parse(value ||  "[]");
 
-    const search =   parse.find((t:any)=> t.types == types);
+    const search =   parse.find((t)=> t.types.name == types);
 
     if(search){
         search.types.count += 1;
-        const subsearch =  search.subtypes.find((t: any)=> t.name  == subtypes );
+        const subsearch =  search.subtypes.find((t)=> t.name  == subtypes );
         if (subsearch){
             subsearch.count += 1 
         }else{

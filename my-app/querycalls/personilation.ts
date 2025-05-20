@@ -1,14 +1,21 @@
-export async function typecall({productid} : {productid : string }){
+export async function typecall({productid , userid} : {productid : string , userid : string}){
     const query  = `
     query producttypes($productid: string!){
        producttypes(productid: $productid){
           types 
           subtypes 
           price 
+          productid 
+          productname
+          imageurl
+          stockeleft
+          discount 
+          rating
+          provider
        }
     }`;
 
-    const variable = {productid};
+    const variable = {productid , userid};
 
     const response = await fetch("/graphql" , {
         method :"POST" , 
@@ -18,6 +25,6 @@ export async function typecall({productid} : {productid : string }){
         body : JSON.stringify({query , variable})
     });
 
-    const {types , subtypes , price} = await response.json();
-    return {types , subtypes , price }
+    const data = await response.json();
+    return data
 }
