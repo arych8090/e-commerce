@@ -20,7 +20,7 @@ type product{
 type Query{
 	product(productid : String!):product
 	cart(userid : String!):cart
-	producttypes( productid : String!) : producttypes
+	producttypes( productid : String! , userid: String!) : producttypes
 },
 
 type Mutation{
