@@ -4,9 +4,9 @@ import { checkoutcall } from '@/querycalls/checkoutcall';
 import { kafka } from '@/kafkaserver/server'; 
 import { get } from 'http';
 app.post("/productvalue" , async(req , res)=>{
-	const {productid} = await req.body;
+	const {productid} : {productid : string} = await req.body;
 
-	const productvalues = await cartsearch(productid);
+	const productvalues = await cartsearch({productid});
         const sendvalues = async()=>{
 		        const producer =  kafka.producer();
                         await producer.connect();

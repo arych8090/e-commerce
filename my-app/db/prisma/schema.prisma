@@ -9,101 +9,80 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  id Int @id @default(autoincrement())
+model User {
+  id  Int @id @default(autoincrement())
   userid String @unique
-  email String @unique
-  phonenumber String @unique
-  password String
+  username String
+  email  String @unique
+  phoneno String @unique
   provider String
-  orders Order[]
-  address Address[]
-  intersection  Typeinterection[]
+  interection usertypeinterection[]
+  orders orders[]
 }
 
-model Order {
+model usertypeinterection{
   id Int @id @default(autoincrement())
-  Orderid String @unique
-  createdAt DateTime @default(now())
+  type String
+  count Int @default(0)
+  userid Int
   user User @relation(fields: [userid] , references: [id])
-  userid Int 
-  product Products[]
-  status Status
+  subtype usersubtypeinterections[]
+
+  @@unique([type , userid])
 }
 
-model Products{
+model usersubtypeinterections{
+  id Int @id @default(autoincrement())
+  subtypes String
+  count Int @default(0)
+  usertypeid Int
+  usertypeinterections usertypeinterection @relation(fields: [usertypeid] ,  references: [id])
+
+  @@unique([subtypes , usertypeid])
+}
+
+model product {
   id Int @id @default(autoincrement())
   productid String @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name String 
+  productname String
+  productType String
+  productSubtype String[]
   price Int 
-  imageurl String @unique
-  AboutProduct String
-  Interations Int
-  Rating String
-  Stock Int
-  Bought Int
-  Discount String
-  order Order[] 
-  Provider Provider @relation(fields: [providerid] , references: [id])
-  providerid Int
-  types typeunit @relation(fields: [typeid] , references: [id])
-  typeid Int
+  imageurl String
+  aboutProject String
+  stockleft Int
+  discount Int
+  rating Int
+  createdAt DateTime
+  updatedAt DateTime
+  likes Int
+  productinterections Int
+  provider Int
 }
 
-model typeunit{
+model typeinterections {
   id Int @id @default(autoincrement())
-  typename String @unique
-  products Products[]
-  interections Typeinterection[]
-}
-
-model Typeinterection{
-  user User @relation(fields: [userid] , references: [id])
-  userid Int
-  type typeunit @relation(fields: [typeid] , references: [id])
-  typeid Int
+  type String @unique
   count Int @default(0)
-  @@id([userid,typeid])
+  subtypes subtypes[]
 }
 
-model Address{
+model subtypes{
   id Int @id @default(autoincrement())
-  Address String @unique
-  Type type
-  User User[]
+  subtype String 
+  count Int @default(0)
+  typeid Int
+  type typeinterections @relation(fields: [typeid] , references: [id])
+
+  @@unique([subtype , typeid ])
 }
 
-model Provider{
+model orders {
   id Int @id @default(autoincrement())
-  providerid String @unique
-  products Products[]
-  email String @unique
-  phonenumber String @unique
-  finance Finance? @relation(fields: [financeid] , references: [id])
-  financeid Int @unique
-}
+  orderid Int 
+  orderuser Int
+  user User @relation(fields: [orderuser] , references: [id])
+  products String[] 
 
-model Finance{
-  id Int @id @default(autoincrement())
-  totalexpense Int
-  totalincome Int
-  totalrevenue Int
-  totalloss Int
-  productsell Int
-  productleft  Int
-  provider Provider?
-}
-
-enum Status {
-  InProgress 
-  Sucessful
-  Failed
-}
-
-enum type {
-  Home 
-  Work
-  Other
+  @@unique([orderid , orderuser])
 }
