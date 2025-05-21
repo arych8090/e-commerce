@@ -1,6 +1,6 @@
-export async function typecall({productid , userid} : {productid : string , userid : string}){
+export async function personilation({productid , userid} : {productid : string , userid : string}){
     const query  = `
-    query producttypes($productid: string!){
+    query typesinterections($productid: string!){
        producttypes(productid: $productid){
           types 
           subtypes 

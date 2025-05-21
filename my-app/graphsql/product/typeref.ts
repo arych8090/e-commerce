@@ -20,7 +20,10 @@ type product{
 type Query{
 	product(productid : String!):product
 	cart(userid : String!):cart
-	producttypes( productid : String! , userid: String!) : producttypes
+	typesinterections( productid : String! , userid: String!) : typesinterections
+	producttypes(productid : String!):producttype
+	fuzzysearch(productname : String!):fuzzysearch
+	search(productname : String!):search
 },
 
 type Mutation{
