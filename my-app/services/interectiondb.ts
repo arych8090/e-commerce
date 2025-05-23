@@ -1,6 +1,6 @@
 import { kafka } from "@/kafkaserver/server";
 import prisma from "@/db";
-import { count } from "console";
+
 
 export const dbinterectionsync = async()=>{
     const consumer = kafka.consumer({groupId:'db-group'});

@@ -1,0 +1,60 @@
+
+import { Socket } from "socket.io";
+import { io } from "./backsocket";
+
+const userTimer = new Map<string, NodeJS.Timeout>();
+
+function resetuserTimer(socket: Socket){
+    const socketId = socket.id
+    if (userTimer.has(socketId)){
+        clearTimeout(userTimer.get(socketId))
+    }
+
+    const timeout =  setTimeout(()=>{
+        for(const room of socket.rooms){
+            if(room !== socket.id){
+                socket.leave(room)
+            }
+        }
+
+        userTimer.delete(socketId)
+    },10*60*1000)
+
+    userTimer.set(socketId , timeout)
+}
+
+io.on("connection" , (socket:Socket)=>{
+    socket.on("subscribe-multiple-products" , (productids : string[])=>{
+        productids.forEach((productid: string) => {
+            socket.join(`product-${productid}`)
+            console.log("the group for the productid is made" , productid)
+        });
+
+        resetuserTimer(socket)
+        
+    })
+
+    socket.on(`productstocks` , (stockinfo : {productid : string , stock : number})=>{
+        const {productid , stock} = stockinfo;
+
+        io.to(`product-${productid}`).emit("stocklistener" ,{productid , stock})
+    })
+
+    socket.on('priceproduct' , (priceinfo : {productid: string ,  price :number})=>{
+        const {productid ,  price } = priceinfo;
+
+        io.to(`product-${productid}`).emit("pricelistener" , {productid , price})
+    })
+
+    socket.on("leavegroup" , ()=>{
+        for(const room in socket.rooms){
+           if(room !== socket.id){
+            socket.leave(room)
+           }
+        }
+    })
+
+    socket.on("types" ,  (type : string)=>{
+        
+    })
+})
