@@ -3,11 +3,10 @@ import { kafka } from '@/kafkaserver/server';
 import { typecall } from '@/querycalls/typecall';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../lib/auth';
-import { redis } from '@/redisomserver/mainredis';
 import { personilation } from '@/querycalls/personilation';
 import { timeoutcall } from '@/querycalls/timeoutsearch';
 import { searchcall } from '@/querycalls/searchcall';
-import { connect } from 'http2';
+
 
 const session = await getServerSession(authOptions)
 
@@ -24,28 +23,9 @@ app.post("/interection" , async(req , res)=>{
                   messages:[{
                          value:JSON.stringify({userid , types , subtypes})
                         }]
-               })
-    
-    const key = `interection:${userid}`;
+               });
 
-    const value  =  await redis.hget(key , "types");
-    const parse : {types : {name :string , count :number}  , subtypes:{ name : string , count : number}[]}[] = JSON.parse(value ||  "[]");
-
-    const search =   parse.find((t)=> t.types.name == types);
-
-    if(search){
-        search.types.count += 1;
-        const subsearch =  search.subtypes.find((t)=> t.name  == subtypes );
-        if (subsearch){
-            subsearch.count += 1 
-        }else{
-            search.subtypes.push({name: subtypes , count : 1})
-        }
-    }else{
-        parse.push({types:types , subtypes:[{ name :subtypes , count :1}]})
-    }
-    await redis.hset(key , "types" , JSON.stringify(parse));
-    await redis.expire(key , 172800);
+    res.status(200).json({message : "the interection been send and to the kafka "})
 });
 
 app.get("/interectiondata" , async (req , res)=>{
