@@ -38,8 +38,8 @@ export const resolvers ={
 
 			return parsedvalues;
 		},
-		typesinterections:async(_:any , args:{productid : string , userid: string})=>{
-			const {productid , userid} = args ;
+		typesinterections:async(_:any , args:{ userid: string})=>{
+			const { userid} = args ;
 			const key = `interection:${userid}`;
 			const value  =  await redis.hget(key , "types");
 			const parse: {types : {name :string ,  count: number} ,  subtypes:{name : string , count : number}[]}[] = JSON.parse(value || "[]");

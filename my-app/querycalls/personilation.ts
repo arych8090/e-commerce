@@ -1,7 +1,7 @@
 export async function personilation({productid , userid} : {productid : string , userid : string}){
     const query  = `
-    query typesinterections($productid: string!){
-       producttypes(productid: $productid){
+    query typesinterections($userid: string!){
+       producttypes(userid: $userid){
           types 
           subtypes 
           price 

@@ -54,7 +54,18 @@ io.on("connection" , (socket:Socket)=>{
         }
     })
 
-    socket.on("types" ,  (type : string)=>{
-        
+    socket.on("types" ,  (message)=>{
+        const {type , subtype} =  message;
+        socket.join(`type-${type}-${subtype}`)
+    })
+
+    socket.on("price" ,  (message)=>{
+        const {price , type  , subtype } = message;
+        io.to(`type-${type}-${subtype}`).emit("notication" , {type ,subtype,price})
+    })
+
+    socket.on("stock" ,  (message)=>{
+        const {stock, type  , subtype } = message;
+        io.to(`type-${type}-${subtype}`).emit("notication" , {type ,subtype,stock})
     })
 })

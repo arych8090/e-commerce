@@ -2,7 +2,7 @@ import {app} from './handler';
 import { cartsearch } from '@/querycalls/cartcalls';
 import { checkoutcall } from '@/querycalls/checkoutcall';
 import { kafka } from '@/kafkaserver/server'; 
-import { get } from 'http';
+
 app.post("/productvalue" , async(req , res)=>{
 	const {productid} : {productid : string} = await req.body;
 

@@ -1,14 +1,12 @@
 import { kafka } from "@/kafkaserver/server";
 import prisma from "@/db";
 
+const consumer = kafka.consumer({groupId:'db-group'});
 
-export const dbinterectionsync = async()=>{
-    const consumer = kafka.consumer({groupId:'db-group'});
-
-    await consumer.connect();
-    await consumer.subscribe({topic:"Interections" , fromBeginning:true});
-    await consumer.run({
-        eachMessage : async({topic , message})=>{
+await consumer.connect();
+await consumer.subscribe({topic:"Interections" , fromBeginning:true});
+await consumer.run({
+    eachMessage : async({topic , message})=>{
             const raw = message.value?.toString();
             const parse = JSON.parse(raw || "{}");
 
@@ -50,5 +48,4 @@ export const dbinterectionsync = async()=>{
                 }
             })
         }
-    })
-}
+});

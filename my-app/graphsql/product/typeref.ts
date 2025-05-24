@@ -20,7 +20,7 @@ type product{
 type Query{
 	product(productid : String!):product
 	cart(userid : String!):cart
-	typesinterections( productid : String! , userid: String!) : typesinterections
+	typesinterections( userid: String!) : typesinterections
 	producttypes(productid : String!):producttype
 	fuzzysearch(productname : String!):fuzzysearch
 	search(productname : String!):search
