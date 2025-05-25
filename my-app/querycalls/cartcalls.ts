@@ -4,9 +4,7 @@ export async function cartsearch({ productid }: { productid: string }) {
       product(productid: $productid) {
         productid
         productname
-        stockleft
         price
-        provider
         imageurl
       }
     }

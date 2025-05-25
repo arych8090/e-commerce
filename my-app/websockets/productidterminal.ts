@@ -24,29 +24,25 @@ function resetuserTimer(socket: Socket){
 }
 
 io.on("connection" , (socket:Socket)=>{
-    socket.on("subscribe-multiple-products" , (productids : string[])=>{
-        productids.forEach((productid: string) => {
+    socket.on("subscribe-products" , (productid : string)=>{
             socket.join(`product-${productid}`)
             console.log("the group for the productid is made" , productid)
+            resetuserTimer(socket)
         });
 
-        resetuserTimer(socket)
-        
-    })
-
     socket.on(`productstocks` , (stockinfo : {productid : string , stock : number})=>{
-        const {productid , stock} = stockinfo;
+        const {productid , stock} = stockinfo; //not yet used 
 
         io.to(`product-${productid}`).emit("stocklistener" ,{productid , stock})
     })
 
     socket.on('priceproduct' , (priceinfo : {productid: string ,  price :number})=>{
-        const {productid ,  price } = priceinfo;
+        const {productid ,  price } = priceinfo;  //not yet used
 
         io.to(`product-${productid}`).emit("pricelistener" , {productid , price})
     })
 
-    socket.on("leavegroup" , ()=>{
+    socket.on("leavegroup" , ()=>{ //not yet used 
         for(const room in socket.rooms){
            if(room !== socket.id){
             socket.leave(room)

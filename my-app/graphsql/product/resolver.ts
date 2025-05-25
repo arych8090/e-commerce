@@ -7,7 +7,7 @@ export const resolvers ={
 	DateTime: GraphQLDateTime,
 	Query:{
 		product:async(_:any , args:{productid : string})=>{
-			const productid = args;
+			const {productid} = args;
 
 			const products  = await ProductRepository
 			                        .search()
@@ -19,9 +19,7 @@ export const resolvers ={
 	        return ({
 			       productid : product.productid,
 			       productname : product.productname,
-			       stockleft : product.stockleft,
 			       price : product.price ,
-			       provider : product.provider , 
 			       imageurl : product.imageurl
 		       });
 
@@ -29,14 +27,9 @@ export const resolvers ={
 		cart:async(_:any , args:{userid : string})=>{
 			const {userid} = args ;
 			const key =  `cart:${userid}`
-			const value = await redis.hgetall(key);
-
-			const parsedvalues = Object.entries(value).map(([productid ,value]) => {
-				const parsed =  JSON.parse(value);
-				return{productid , ...parsed};
-			});
-
-			return parsedvalues;
+			const value  = await redis.get(key);
+			const parse  : {productid  :string  , productname :string , price : number ,imageurl : string ,quantity : number}[] = JSON.parse(value || "[]");
+			return parse;
 		},
 		typesinterections:async(_:any , args:{ userid: string})=>{
 			const { userid} = args ;

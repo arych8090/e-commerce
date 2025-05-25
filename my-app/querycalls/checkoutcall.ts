@@ -2,11 +2,11 @@ export async function checkoutcall({ userid }: { userid: string }) {
   const query = `
     query ($userid: String!) {
       cart(userid: $userid) {
-        userid
         productid
         productname 
         price
         imageurl
+        quantity
       }
     }
   `;

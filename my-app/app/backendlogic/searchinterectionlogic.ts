@@ -11,8 +11,8 @@ import { searchcall } from '@/querycalls/searchcall';
 const session = await getServerSession(authOptions)
 
 app.post("/interection" , async(req , res)=>{
-    const { productid } = req.body;
-    const userid = session.user.id;
+    const { productid } : {productid:string} = req.body;
+    const userid : string  = session.user.id;
 
     const { types, subtypes, price } = await typecall({productid});
 
@@ -54,15 +54,6 @@ app.get("/search" , async (req ,  res)=>{
 
     const search  =  await searchcall({productname});
 
-    const producer =  kafka.producer();
-    await producer.connect();
-    producer.send({
-        topic:"socketconnection",
-        messages : [{
-            value : productname
-        }]
-    });
-    await producer.disconnect()
 
     return search
 })
