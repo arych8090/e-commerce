@@ -8,7 +8,7 @@ export async function personilation({productid , userid} : {productid : string ,
           productid 
           productname
           imageurl
-          stockeleft
+          stockleft
           discount 
           rating
           provider

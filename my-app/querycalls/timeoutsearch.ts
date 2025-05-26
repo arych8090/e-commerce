@@ -9,7 +9,7 @@ export async function timeoutcall({productname} : {productname : string}){
 
     const variable = productname;
 
-    const response = await fetch("/graphsql" , {
+    const responses = await fetch("/graphsql" , {
         method : "GET",
         headers : {
             "Content,-Type" : "application/json"
@@ -17,5 +17,6 @@ export async function timeoutcall({productname} : {productname : string}){
         body : JSON.stringify({query,variable})
     });
 
-    return response
+    const data  =  responses.json();
+    return data 
 }

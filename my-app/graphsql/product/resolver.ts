@@ -147,36 +147,37 @@ export const resolvers ={
 		},
 		fuzzysearch:async(_:any , agrs : {productname : string})=>{
 			const {productname}  = agrs;
-			const search =  await ProductRepository.search()
+			const [search , search2 , search3] = await  Promise.all([
+			                      ProductRepository.search()
 			                     .where("productname").match(productname)
 								 .sortDesc("productinterection")
-								 .returnAll();
-		    const search2  =  await ProductRepository.search()
+								 .returnAll() ,		                           
+								   ProductRepository.search()
 			                      .where("productSubtypes").match(productname)
 								  .sortDesc("productinterection")
-								  .returnAll();
-			const search3  =  await ProductRepository.search()
+								  .returnAll() ,
+			                       ProductRepository.search()
 			                      .where("productType").match(productname)
 								  .sortDesc("productinterection")
-								  .returnAll();
+								  .returnAll(),])
 			const searches = [...search , ...search2 , ...search3];
 			const result = searches.slice(0,3)
 			return result
 		},
 		search:async(_:any , args:{productname : string})=>{
 			const {productname} = args;
-			const search  =  await ProductRepository.search()
+			const [search , search2 , search3] =  await Promise.all([ ProductRepository.search()
 			                        .where("productSubtypes").match(productname)
 									.sortDesc("productinterection")
-									.returnAll();
-			const search2  =  await ProductRepository.search()
+									.returnAll(),
+			                         ProductRepository.search()
 			                        .where("productname").equals(productname)
 									.sortDesc("productinterection")
-									.returnAll();
-		    const searc3  =  await ProductRepository.search()
-			                       .where("productType").equal(productname)
-								    .returnAll();
-			const products= [...search , ...search2 , ...searc3];
+									.returnAll(),
+		                             ProductRepository.search()
+			                        .where("productType").equal(productname)
+								    .returnAll()])
+			const products= [...search , ...search2 , ...search3];
 			const result  =  products.slice(0,20);
 
 			return result

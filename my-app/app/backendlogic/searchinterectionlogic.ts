@@ -34,26 +34,26 @@ app.get("/interectiondata" , async (req , res)=>{
 
 
 
-    const interectionvalues = await personilation({userid , productid});
-
-    return interectionvalues
+    const interectionvalues :{types : string , subtypes : string , price : number , productid : string ,productname : string , imageurl : string , stockleft  : number , discount : number , rating : number , provider : string}[] = await personilation({userid , productid});
+ 
+    return res.status(200).json(interectionvalues)
 
 });
 
 app.get("/timeoutcall", async(req ,  res)=>{
     const {product } : {product : string} = req.body;
     const productname =  product.toLowerCase();
-    const searchdata = await timeoutcall({productname});
+    const searchdata : {imageurl : string , productname : string}[] = await timeoutcall({productname});
 
-    return searchdata
+    return res.status(200).json(searchdata)
 });
 
 app.get("/search" , async (req ,  res)=>{
     const {product} : {product :  string} = req.body;
     const productname  =  product.toLowerCase();
 
-    const search  =  await searchcall({productname});
+    const search : {productid : string , productname : string  ,  imageurl : string  , price: number , stockleft : number , discount :number , rating  : number , provider : string  }[] =  await searchcall({productname});
 
 
-    return search
+    return res.status(200).json(search)
 })

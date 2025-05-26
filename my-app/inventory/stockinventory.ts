@@ -12,7 +12,7 @@ await stockconsumer.run({
 	 const {productid,stock,price, sale , type , subtype } = parse ;
 	 const key = `stock-${productid}`;
 
-	 const value= await redis.hget(key , "details");
+	 const value= await redis.get(key);
 	 const data : {productid : string , stock: number , price:number , sale:number} = JSON.parse(value || "{}");
 
 	 const oldprice =  data.price;
@@ -34,10 +34,10 @@ await stockconsumer.run({
 	    if(data.sale !== sale){
 	        data.sale = sale 
 	    }
-		await redis.hset(key , "details" , JSON.stringify(data))
+		await redis.hset(key , JSON.stringify(data))
 	 }else{
 	    const newdata =  {productid : productid , stock : stock , price : price , sale:sale , type:type , subtype:subtype}
-	    await redis.hset(key ,"details" ,JSON.stringify(newdata));
+	    await redis.hset(key ,JSON.stringify(newdata));
 	 }
 
 	 function pricealertcheck() {

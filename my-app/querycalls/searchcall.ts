@@ -26,5 +26,7 @@ export async function searchcall({productname}:{productname:string}){
         })
     });
 
-    return search
+    const data  =  search.json();
+
+    return data 
 }

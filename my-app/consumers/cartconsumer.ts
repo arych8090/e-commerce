@@ -3,7 +3,7 @@ import { redis } from "./../redisomserver/mainredis";
 import socket from "@/websockets/socket"
 
 export const consumercart = async () => {
-	const consumer = kafka.consumer({ groupId: 'cart-group' }); // ✅ Fix here
+	const consumer = kafka.consumer({ groupId: 'cart-group' }); 
 
 	await consumer.connect();
 	await consumer.subscribe({ topic: 'P-S', fromBeginning: true });
@@ -34,7 +34,7 @@ export const consumercart = async () => {
 				parse.push({productid ,productname ,price , imageurl ,quantity})
 				socket.emit("subscribe-products" , productid )
 			}
-			await redis.hset(key , JSON.stringify(parse))
+			await redis.set(key , JSON.stringify(parse))
 			console.log('Data saved in Redis for:', userid);
 		}
 	});
