@@ -8,6 +8,12 @@ service :
     container_name: mainserver1
     ports:
       - "3000 : 3000"
+    healthcheck:
+        test: ["CMD", "curl" , "-f" , "http://localhost:3000/health"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+        start_period: 10s
     volumes:
       - mainserver1-data:/data
     networks:
@@ -19,6 +25,12 @@ service :
     container_name: mainserver2
     ports:
       - "3001:3000"
+    healthcheck:
+        test: ["CMD", "curl" , "-f" , "http://localhost:3000/health"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+        start_period: 10s
     volumes:
       - mainserver2-data:/data
     networks:
@@ -30,6 +42,12 @@ service :
     container_name : mainserver3
     ports:
       - "3002:3000"
+    healthcheck:
+        test: ["CMD", "curl" , "-f" , "http://localhost:3000/health"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+        start_period: 10s
     volumes:
       - mainserver3-data:/data
     networks:

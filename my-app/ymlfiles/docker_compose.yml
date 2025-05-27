@@ -12,12 +12,7 @@ services:
         - mainserver1
         - mainserver2
         - pay-stripe2
-     healthcheck:
-          test: ["CMD", "nc", "-z", "localhost", "80"]
-          interval: 30s
-          timeout: 10s
-          retries: 5
-          start_period: 10s
+
 
   kafka1:
      extends:
@@ -42,12 +37,7 @@ services:
           - redis4
           - redis5
           - redis6
-    healthcheck:
-          test: ["CMD", "nc", "-z", "localhost", "9002"]
-          interval: 30s
-          timeout: 10s
-          retries: 5
-          start_period: 10s
+
   email-notifi:
     extends:
          file: ./notification/docker-compose.notifi.yml
@@ -61,12 +51,7 @@ services:
           - redis4
           - redis5
           - redis6
-    healthcheck:
-          test: ["CMD", "nc", "-z", "localhost", "9092"]
-          interval: 30s
-          timeout: 10s
-          retries: 5
-          start_period: 10s
+
   pay-stripe:
     extends:
          file: ./payment/docker-compose.payment.yml
@@ -99,12 +84,7 @@ services:
           - redis4
           - redis5
           - redis6
-    healthcheck:
-          test: ["CMD", "nc", "-z", "localhost", "9092"]
-          interval: 30s
-          timeout: 10s
-          retries: 5
-          start_period: 10s
+
   redis1:
     extends:
          file: ./redis/docker-compose.redis.yml
@@ -152,12 +132,7 @@ services:
           - pay-stripe2
           - email-notifi
           - graphsql-gateway
-    healthcheck:
-          test: ["CMD", "nc", "-z", "localhost", "9092"]
-          interval: 30s
-          timeout: 10s
-          retries: 5
-          start_period: 10s
+
   mainserver2:
     extends:
          file: ./mainapp/docker-compose.mainserver.yml
@@ -175,12 +150,7 @@ services:
           - pay-stripe2
           - email-notifi
           - graphsql-gateway
-    healthcheck:
-          test: ["CMD", "nc", "-z", "localhost", "9092"]
-          interval: 30s
-          timeout: 10s
-          retries: 5
-          start_period: 10s
+
 
 networks:
   app-global-network:

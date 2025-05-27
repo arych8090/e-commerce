@@ -20,6 +20,12 @@ services:
             - SERVICE_TYPES=http://types-service:4006/graphsql
             - SERVICE_PROVIDER=http://provider-service:4007/graphsql
             - SERVICE_FINANCE=http://finance-service:4008/graphsql
+          healthcheck:
+               test: ["CMD", "curl" , "-f" , "http://localhost:4000/health"]
+               interval: 30s
+               timeout: 10s
+               retries: 5
+               start_period: 10s
           network:
             - app-global-network
           volumes:
