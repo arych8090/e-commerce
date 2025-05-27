@@ -11,8 +11,8 @@ const userschema= new Schema("User" , {
 const ProductSchema = new Schema("Product" , {
     productid : {type:'string'},
     productname : {type:'string'},
-    productType : {type:"string" ,  sortable:true},
-    productSubtypes : {type:'string[]' , sortable:true },
+    type : {type:"string" ,  sortable:true},
+    subtypes : {type:'string' , sortable:true },
     price : {type:'number' , sortable:true},
     imageurl : {type:'string'},
     aboutproduct : {type:'string'},

@@ -2,6 +2,7 @@ import {GraphQLDateTime} from 'graphql-scalars';
 import {ProductRepository} from './../../redisomserver/redisomserver';
 import {redis} from './../../redisomserver/mainredis'
 import prisma from '@/db';
+import {Product} from '@/interfaces/interface'
 
 export const resolvers ={
 	DateTime: GraphQLDateTime,
@@ -58,7 +59,7 @@ export const resolvers ={
                                            .where("productType").equal(types)
                                            .and("productSubtypes").equal(sub.name)
 										   .sortDesc("productinterection")
-                                           .returnAll();
+                                           .returnAll() as Product[];
 										  
 										   const slice  =  res.slice(0,5);
 										   return slice
@@ -141,27 +142,37 @@ export const resolvers ={
 			const {productid} =  args ;
 			const types =  await ProductRepository.search()
 			                     .where("productid").equal(productid)
-								 .returnAll();
+								 .returnAll() as Product[];
 			
 			return types
 		},
 		fuzzysearch:async(_:any , agrs : {productname : string})=>{
 			const {productname}  = agrs;
-			const [search , search2 , search3] = await  Promise.all([
+			const [search  , search2 , search3] : [Product[] , Product[] , Product[]] = await  Promise.all([
 			                      ProductRepository.search()
 			                     .where("productname").match(productname)
 								 .sortDesc("productinterection")
-								 .returnAll() ,		                           
+								 .return.all() ,		                           
 								   ProductRepository.search()
 			                      .where("productSubtypes").match(productname)
 								  .sortDesc("productinterection")
-								  .returnAll() ,
+								  .return.all() ,
 			                       ProductRepository.search()
 			                      .where("productType").match(productname)
 								  .sortDesc("productinterection")
-								  .returnAll(),])
+								  .return.all(),]) as [Product[] , Product[] , Product[]]
 			const searches = [...search , ...search2 , ...search3];
 			const result = searches.slice(0,3)
+			const result1 = result.map((items)=>({
+				productname : items.productname ,
+				productid : items.productid ,
+				type : items.type ,
+				subtype : items.subtype ,
+				imageurl : items.imageurl,
+				interctivity : 1
+			}));
+			const key = `cache-global`
+			await redis.set(key , JSON.stringify(result1))
 			return result
 		},
 		search:async(_:any , args:{productname : string})=>{
@@ -176,7 +187,7 @@ export const resolvers ={
 									.returnAll(),
 		                             ProductRepository.search()
 			                        .where("productType").equal(productname)
-								    .returnAll()])
+								    .returnAll()]) as [Product[] , Product[] , Product[]]
 			const products= [...search , ...search2 , ...search3];
 			const result  =  products.slice(0,20);
 
@@ -187,4 +198,3 @@ export const resolvers ={
 
     }
 }
-

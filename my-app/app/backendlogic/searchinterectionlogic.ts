@@ -6,6 +6,7 @@ import { authOptions } from '../lib/auth';
 import { personilation } from '@/querycalls/personilation';
 import { timeoutcall } from '@/querycalls/timeoutsearch';
 import { searchcall } from '@/querycalls/searchcall';
+import {redis} from "@/redisclusters/rediscluter";
 
 
 const session = await getServerSession(authOptions)
@@ -40,20 +41,37 @@ app.get("/interectiondata" , async (req , res)=>{
 
 });
 
-app.get("/timeoutcall", async(req ,  res)=>{
+app.get("/search", async(req ,  res)=>{
     const {product } : {product : string} = req.body;
     const productname =  product.toLowerCase();
-    const searchdata : {imageurl : string , productname : string}[] = await timeoutcall({productname});
+    const searchdata : {imageurl : string , productname : string}[] = await searchcall({productname});
 
     return res.status(200).json(searchdata)
 });
 
-app.get("/search" , async (req ,  res)=>{
+app.get("/timeoutcall" , async (req ,  res)=>{
     const {product} : {product :  string} = req.body;
     const productname  =  product.toLowerCase();
+    const key = `cache-global`;
+    const value  =  await  redis.get(key);
+    if(value){
+        const parse :{productname : string , productid : string , imageurl : string , type : string , subtype : string , interectivity : number }[]=JSON.parse(value || "[]");
 
-    const search : {productid : string , productname : string  ,  imageurl : string  , price: number , stockleft : number , discount :number , rating  : number , provider : string  }[] =  await searchcall({productname});
+        const cachesearch =  parse.find((t) =>{
+            t.productid.toLowerCase().includes(productname),
+            t.productname.toLowerCase().includes(productname),
+            t.type.toLowerCase().includes(productname),
+            t.subtype.toLowerCase().includes(productname)
+        })
 
+        if(cachesearch){
+            cachesearch.interectivity += 1 ;
+            await redis.set(key , JSON.stringify(parse))
+            return res.status(200).json(cachesearch)
+        }else{
+                const search : {productid : string , productname : string  ,  imageurl : string  , price: number , stockleft : number , discount :number , rating  : number , provider : string  }[] =  await timeoutcall({productname});
+                return res.status(200).json(search)
+        }
 
-    return res.status(200).json(search)
+    }
 })

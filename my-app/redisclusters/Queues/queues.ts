@@ -1,8 +1,15 @@
 import { redis } from "../rediscluter"; 
 import {Queue} from "bullmq";
 
-const firstqueue  =  new Queue("initialqueue" , {
+const cachecleanqueue  =  new Queue("clear-cache" , {
     connection:redis
 });
 
-export {firstqueue};
+await cachecleanqueue.add('clean-search-cache' , {
+    repeat:{
+        every : 1000 * 60 * 60
+    },
+    removeOnComplete:true
+})
+
+export {cachecleanqueue};
