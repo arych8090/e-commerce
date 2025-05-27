@@ -1,0 +1,43 @@
+version : "3.8"
+
+service :
+  mainserver1 :
+    build:
+      context : ../app
+      dockerfile : ../ymlfiles/mainapp/DOCKERFILE
+    container_name: mainserver1
+    ports:
+      - "3000 : 3000"
+    volumes:
+      - mainserver1-data:/data
+    networks:
+      - app-global-network
+  mainserver2 :
+    build:
+      context : ../app
+      dockerfile : ../ymlfiles/mainapp/DOCKERFILE
+    container_name: mainserver2
+    ports:
+      - "3001:3000"
+    volumes:
+      - mainserver2-data:/data
+    networks:
+      - app-global-network
+  mainserver3 :
+    build:
+      context: ../app
+      dockerfile: ../ymlfilesmainapp/DOCKERFILE
+    container_name : mainserver3
+    ports:
+      - "3002:3000"
+    volumes:
+      - mainserver3-data:/data
+    networks:
+      - app-global-network
+  volumes:
+    mainserver1-data:
+    mainserver2-data:
+    mainserver3-data:
+  networks:
+    app-global-network:
+      external:true

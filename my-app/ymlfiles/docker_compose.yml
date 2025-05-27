@@ -9,51 +9,179 @@ services:
         - graphsql-gateway
         - email-notifi
         - pay-stripe
+        - mainserver1
+        - mainserver2
+        - pay-stripe2
+     healthcheck:
+          test: ["CMD", "nc", "-z", "localhost", "80"]
+          interval: 30s
+          timeout: 10s
+          retries: 5
+          start_period: 10s
+
   kafka1:
      extends:
         file: ./kafka/docker-compose.kafka.yml
         service: kafka1
+
   kafka2:
     extends:
          file: ./kafka/docker-compose.kafka.yml
          service: kafka2
+
   graphsql-gateway:
     extends:
          file: ./graphsql/docker-compose.graphql.yml
          service: graphsql-gateway
+    depends_on:
+          - kafka1
+          - kafka2
+          - redis1
+          - redis2
+          - redis3
+          - redis4
+          - redis5
+          - redis6
+    healthcheck:
+          test: ["CMD", "nc", "-z", "localhost", "9002"]
+          interval: 30s
+          timeout: 10s
+          retries: 5
+          start_period: 10s
   email-notifi:
     extends:
          file: ./notification/docker-compose.notifi.yml
          service: email-notifi
+    depends_on:
+          - kafka1
+          - kafka2
+          - redis1
+          - redis2
+          - redis3
+          - redis4
+          - redis5
+          - redis6
+    healthcheck:
+          test: ["CMD", "nc", "-z", "localhost", "9092"]
+          interval: 30s
+          timeout: 10s
+          retries: 5
+          start_period: 10s
   pay-stripe:
     extends:
          file: ./payment/docker-compose.payment.yml
          service: pay-stripe
+    depends_on:
+          - kafka1
+          - kafka2
+          - redis1
+          - redis2
+          - redis3
+          - redis4
+          - redis5
+          - redis6
+    healthcheck:
+          test: ["CMD", "nc", "-z", "localhost", "9092"]
+          interval: 30s
+          timeout: 10s
+          retries: 5
+          start_period: 10s
+  pay-stripe2:
+    extends:
+         file: ./payment/docker-compose.payment.yml
+         service: pay-stripe2
+    depends_on:
+          - kafka1
+          - kafka2
+          - redis1
+          - redis2
+          - redis3
+          - redis4
+          - redis5
+          - redis6
+    healthcheck:
+          test: ["CMD", "nc", "-z", "localhost", "9092"]
+          interval: 30s
+          timeout: 10s
+          retries: 5
+          start_period: 10s
   redis1:
     extends:
          file: ./redis/docker-compose.redis.yml
          service: redis1
+
   redis2:
     extends:
          file: ./redis/docker-compose.redis.yml
          service: redis2
+
   redis3:
     extends:
          file: ./redis/docker-compose.redis.yml
          service: redis3
+
   redis4:
     extends:
          file: ./redis/docker-compose.redis.yml
          service: redis4
+
   redis5:
     extends:
          file: ./redis/docker-compose.redis.yml
          service: redis5
+ 
   redis6:
     extends:
          file: ./redis/docker-compose.redis.yml
          service: redis6
 
-network:
+  mainserver1:
+    extends:
+         file: ./mainapp/docker-compose.mainserver.yml
+         service: mainserver1
+    depends_on:
+          - kafka1
+          - kafka2
+          - redis1
+          - redis2
+          - redis3
+          - redis4
+          - redis5
+          - redis6
+          - pay-stripe
+          - pay-stripe2
+          - email-notifi
+          - graphsql-gateway
+    healthcheck:
+          test: ["CMD", "nc", "-z", "localhost", "9092"]
+          interval: 30s
+          timeout: 10s
+          retries: 5
+          start_period: 10s
+  mainserver2:
+    extends:
+         file: ./mainapp/docker-compose.mainserver.yml
+         service: mainserver2
+    depends_on:
+          - kafka1
+          - kafka2
+          - redis1
+          - redis2
+          - redis3
+          - redis4
+          - redis5
+          - redis6
+          - pay-stripe
+          - pay-stripe2
+          - email-notifi
+          - graphsql-gateway
+    healthcheck:
+          test: ["CMD", "nc", "-z", "localhost", "9092"]
+          interval: 30s
+          timeout: 10s
+          retries: 5
+          start_period: 10s
+
+networks:
   app-global-network:
      external:true

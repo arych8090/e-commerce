@@ -3,8 +3,8 @@ version: "3.8"
 services:
   pay-stripe:
         build: 
-            context: ../..
-            docker: payment/DOCKERFILE
+            context: ../paymentserver
+            docker: ../ymlfiles/payment/DOCKERFILE
         container_name: pay-stripe
         ports:
           - "7000:7000"
@@ -12,9 +12,22 @@ services:
           - my-payment-data:/data
         network:
           - app-global-network 
-volumes:
-  my-payment-data:
 
+  pay-stripe2: 
+         build:
+             context : ../paymentserver
+             dockerfile : ../ymlfiles/payment/DOCKERFILE
+         container_name: pay-stripe2
+         ports : 
+              -  "7001:7000"
+         volumes:
+              - my-payment2-data:/data
+         network:
+              - app-global-network
+  
+  volumes:
+        my-payment-data:
+        my-payment-data2:
 network:
   app-global-network:
      external:true

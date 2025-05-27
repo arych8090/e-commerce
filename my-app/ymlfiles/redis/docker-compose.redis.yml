@@ -15,6 +15,12 @@ services:
                    --cluster-node-timeout 5000
                    --cluster-announce-port 5000
                    --cluster-announce-bus-port 15000
+    healthcheck:
+          test: ["CMD", "redis-cli", "-p" , "5000" , "ping"]
+          interval: 30s
+          timeout: 10s
+          retries: 5
+          start_period: 10s
     volumes:
       - redis1-data:/data
     networks:
@@ -34,6 +40,12 @@ services:
                    --cluster-node-timeout 5000
                    --cluster-announce-port 5001
                    --cluster-announce-bus-port 15001
+    healthcheck:
+          test: ["CMD", "redis-cli", "-p" , "5001" , "ping"]
+          interval: 30s
+          timeout: 10s
+          retries: 5
+          start_period: 10s
     volumes:
       - redis2-data:/data
     networks:
@@ -54,6 +66,12 @@ services:
                    --cluster-node-timeout 5000
                    --cluster-announce-port 5002
                    --cluster-announce-bus-port 15002
+    healthcheck:
+          test: ["CMD", "redis-cli", "-p" , "5002" , "ping"]
+          interval: 30s
+          timeout: 10s
+          retries: 5
+          start_period: 10s
     volumes:
       - redis3-data:/data
     networks:
@@ -74,6 +92,12 @@ services:
                    --cluster-node-timeout 5000
                    --cluster-announce-port 5003
                    --cluster-announce-bus-port 15003
+    healthcheck:
+          test: ["CMD", "redis-cli", "-p" , "5003" , "ping"]
+          interval: 30s
+          timeout: 10s
+          retries: 5
+          start_period: 10s
     volumes:
       - redis4-data:/data
     networks:
@@ -94,6 +118,12 @@ services:
                    --cluster-node-timeout 5000
                    --cluster-announce-port 5004
                    --cluster-announce-bus-port 15004
+    healthcheck:
+          test: ["CMD", "redis-cli", "-p" , "5004" , "ping"]
+          interval: 30s
+          timeout: 10s
+          retries: 5
+          start_period: 10s
     volumes:
       - redis5-data:/data
     networks:
@@ -114,6 +144,12 @@ services:
                    --cluster-node-timeout 5000
                    --cluster-announce-port 5005
                    --cluster-announce-bus-port 15005
+    healthcheck:
+          test: ["CMD", "redis-cli", "-p" , "5005" , "ping"]
+          interval: 30s
+          timeout: 10s
+          retries: 5
+          start_period: 10s
     volumes:
       - redis6-data:/data
     networks:

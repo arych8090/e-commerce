@@ -3,8 +3,8 @@ version: "3.8"
 services:
      graphsql-gateway:
           build: 
-              context: ../..
-              docker: graphsq/DOCKERFILE
+              context: ../graphsql
+              docker: ../ymlfiles/graphsql/DOCKERFILE
           container_name: graphsql-gateway
           port:
              - "4000:4000"
