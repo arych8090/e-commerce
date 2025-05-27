@@ -1,10 +1,10 @@
 version: "3.8"
 
 services:
-  ngnix:
+  nginx:
      extends:
-        file: ./ngnix/docker-compose.ngnix.yml
-        service: ngnix
+        file: ./nginx/docker-compose.nginx.yml
+        service: nginx
      depends_on:
         - graphsql-gateway
         - email-notifi
@@ -51,7 +51,19 @@ services:
           - redis4
           - redis5
           - redis6
-
+  email-notifi2:
+    extends:
+        file: ./notification/docker-compose.notifi.yml
+        service : email-notifi2
+        depends_on: 
+          - kafka1
+          - kafka2
+          - redis1
+          - redis2
+          - redis3
+          - redis4
+          - redis5
+          - redis6
   pay-stripe:
     extends:
          file: ./payment/docker-compose.payment.yml

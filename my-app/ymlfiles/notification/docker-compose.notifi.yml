@@ -3,14 +3,37 @@ version: "3.8"
 services: 
       email-notifi:
              build: 
-                context: ../..
-                docker: notification/DOCKERFILE 
+                context: ../notificationAPI
+                dockerflie: ../ymlfiles/notification/DOCKERFILE
              container_name: email-notifi
              ports :
                - "6000 : 6000"
+             healthcheck:
+                  test: ['CMD' , "curl" , "-f" , "http://localhost:6000/health"]
+                  interval: 30s
+                  timeout: 10s
+                  retries: 5
+                  start_period: 10s
              volumes : 
                - my-notification-data:/data
              network:
+               - app-global-network
+      email-notifi2:
+              build:
+                 context: ../notificationAPI
+                 dockerfile : ../ymlfiles/notification/DOCKERFILE
+              container_name: email-notifi2
+              ports:
+                - "6001:6000"
+              healthcheck:
+                  test: ['CMD' , "curl" , "-f" , "http://localhost:6000/health"]
+                  interval: 30s
+                  timeout: 10s
+                  retries: 5
+                  start_period: 10s
+              volumes:
+               - my-notification2-data:/data
+              networks:
                - app-global-network
 volumes:
   my-notification-data:
