@@ -42,9 +42,15 @@ app.get("/interectiondata" , async (req , res)=>{
 });
 
 app.get("/search", async(req ,  res)=>{
-    const {product } : {product : string} = req.body;
-    const productname =  product.toLowerCase();
-    const searchdata : {imageurl : string , productname : string}[] = await searchcall({productname});
+    const query =  req.query  as {cursor? : string , search? : string }
+    const search  =  query.search || "" ;
+    const cursor = query.cursor || "" ;
+
+    const  productname = search ;
+
+    const searchdata : { productid : string , productname : string, price : number ,imageurl : string  , discount:number , provider : string , newcursor : string}[] = await searchcall({productname , cursor});
+
+
 
     return res.status(200).json(searchdata)
 });

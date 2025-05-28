@@ -175,8 +175,10 @@ export const resolvers ={
 			await redis.set(key , JSON.stringify(result1))
 			return result
 		},
-		search:async(_:any , args:{productname : string})=>{
-			const {productname} = args;
+		search:async(_:any , args:{productname : string , cursor : string})=>{
+			const {productname , cursor} = args;
+
+			
 			const [search , search2 , search3] =  await Promise.all([ ProductRepository.search()
 			                        .where("productSubtypes").match(productname)
 									.sortDesc("productinterection")
@@ -187,11 +189,20 @@ export const resolvers ={
 									.returnAll(),
 		                             ProductRepository.search()
 			                        .where("productType").equal(productname)
-								    .returnAll()]) as [Product[] , Product[] , Product[]]
+								    .returnAll()]) as [Product[] , Product[] , Product[]] 
 			const products= [...search , ...search2 , ...search3];
-			const result  =  products.slice(0,20);
+			const sort  =  products.sort((inta , intb)=> intb.productinterections - inta.productinterections)
+			let list  = sort
+			if(cursor){
+							const sortagain = sort.findIndex(p=> p.productid === cursor)
+							if (sortagain !== -1){
+								list= sort.slice(sortagain+10);
+							}
+			}
+			const result  =  list.slice(0,20);
+			const newcursor =  result.length>0 ? result[result.length -1].productid : null ;
 
-			return result
+			return {result , newcursor}
 		}
     },
 	Mutation:{

@@ -1,19 +1,17 @@
-export async function searchcall({productname}:{productname:string}){
+export async function searchcall({productname , cursor}:{productname:string , cursor : string}){
     const query = `
-    query search(productname : $String!){
-        search(productname : $productname){
+    query search(productname : $String! , cursor : $String){
+        search(productname : $productname ,  cursor : $cursor){
              productid
              productname
              price 
              imageurl
-             stockleft
              discount 
-             rating 
              provider
          }
     }`
 
-    const variable =  productname;
+    const variable =  {productname , cursor};
 
     const search  =  await fetch("/graphsql" , {
         method : "GET" , 
