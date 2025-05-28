@@ -56,10 +56,7 @@ app.get("/checkoutsession" , async (req , res)=>{
 
 	if(unavailable.length > 0){
 		const key =  `cart-${userid}`
-		await redis.del(key)
 		const set  = await Promise.all(available.map(async(items)=>{
-		       const key  = `cart-${items.productid}`;
-		       await redis.del(key)
 		       const value : {productid : string  , productname : string  , price  : number  ,  imageurl : string , quantity : number }= {productid : items.productid , productname : items.productname  , price : items.price , imageurl : items.imageurl ,quantity : items.quantity};
 		       return value
 	       }))

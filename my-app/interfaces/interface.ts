@@ -15,3 +15,12 @@ export interface Product {
 	productinterections : number ,
 	provider : string
 }
+
+export interface searchcall{
+    productid : string
+    productname : string
+    price : number
+    imageurl : string
+    discount : number
+    provider : string
+}

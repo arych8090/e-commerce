@@ -7,6 +7,7 @@ import { personilation } from '@/querycalls/personilation';
 import { timeoutcall } from '@/querycalls/timeoutsearch';
 import { searchcall } from '@/querycalls/searchcall';
 import {redis} from "@/redisclusters/rediscluter";
+import { Product } from '@/interfaces/interface';
 
 
 const session = await getServerSession(authOptions)
@@ -80,4 +81,14 @@ app.get("/timeoutcall" , async (req ,  res)=>{
         }
 
     }
+})
+
+app.get("/product" , async(req,res)=>{
+    const query =  req.query as {product?: string , cursor?: string}
+    const productname = query.product || "";
+    const cursor = query.cursor || "";
+
+    const search  :Product[] =  await searchcall({ productname , cursor});
+
+    return res.status(200).json(search)
 })
