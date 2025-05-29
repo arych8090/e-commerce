@@ -57,7 +57,8 @@ model product {
   updatedAt DateTime
   likes Int
   productinterections Int
-  provider Int
+  providerid Int
+  provider provider @relation(fields: [providerid] ,  references: [id])
 }
 
 model typeinterections {
@@ -85,4 +86,23 @@ model orders {
   products String[] 
 
   @@unique([orderid , orderuser])
+}
+
+model provider{
+  id Int @id @default(autoincrement())
+  providerid  String @unique
+  providername String
+  provideremail String @unique
+  providerProducts product[]
+  finances finance?
+}
+
+model finance{
+  id Int @id @default(autoincrement())
+  totalsale Int
+  totalrevenue Int
+  totalprofit Int
+  totalLoss Int
+  providerid Int @unique
+  provider provider @relation(fields: [providerid] , references: [id])
 }
