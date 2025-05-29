@@ -1,9 +1,22 @@
 "use client"
 import { useState } from "react";
-import { Verifiaction } from "./verification";
+import axios from "axios";
+
+const [userotp , setuserotp] = useState<number>();
+const [email , setemail] = useState("")
+async function verification(otp :any , email:string){
+    const verify  = await axios.get(`http://localhost:3000/verification?${otp}?${email}`);
+    const res =  verify.data ;
+    if(!res){
+        alert("Invalid OTP")
+    }
+}
+
+async function generate(email : string){
+    await axios.post(`http://localhost:3000/generateotp?${email}`)
+}
 
 export const Verficationpage = ()=>{
-    const [userotp , setuserotp] = useState<number>();
 
     return (
         <div>
@@ -15,14 +28,23 @@ export const Verficationpage = ()=>{
                     value={userotp}
                     onChange={(e)=> setuserotp(Number(e.target.value))}
                 />
+                <input
+                   name= "email" 
+                   placeholder="Enter Email"
+                   value={email}
+                   onChange={(e) => setemail(e.target.value)}
+                />
                 <button 
                    onClick={()=>{
-                    if(typeof userotp === "number"){
-                        Verifiaction({userotp})
-                    }else{
-                        alert("enter a number valid otp")
-                    }
+                    verification(userotp , email)
                    }}>submit</button>
+                <button
+                   onClick={()=>{
+                      generate(email)
+                   }}
+                >
+                    generate otp
+                </button>
             </div>
         </div>
     )

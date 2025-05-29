@@ -87,5 +87,10 @@ app.get("/cart" , async (req , res)=>{
 	const value = await redis.get(key)
 	const parse : {productid : string  , productname : string , price : number , imageurl : string , quantity : number}[]= JSON.parse(value || "[]");
 	const reset =  await redis.set(key, JSON.stringify(parse) ,"EX" ,172800 );
+	if(!value){
+		return res.status(200).json({
+			message : "there is nothing in the cart kindly add "
+		})
+	}
 	return res.status(200).json(parse)
 })
