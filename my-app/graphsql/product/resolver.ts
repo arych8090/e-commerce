@@ -3,6 +3,9 @@ import {ProductRepository} from './../../redisomserver/redisomserver';
 import {redis} from './../../redisomserver/mainredis'
 import prisma from '@/db';
 import {Product} from '@/interfaces/interface'
+import { error } from 'console';
+import { equal } from 'assert';
+
 
 export const resolvers ={
 	DateTime: GraphQLDateTime,
@@ -15,14 +18,37 @@ export const resolvers ={
 					                .where('productid')
 					                .equal(`${productid}`)
 					                .returnAll();
-			if (products.length === 0) throw new Error("No matching product");
 		    const product = products[0];
-	        return ({
+			if (products.length === 0) {
+				try{
+					const value  = await prisma.product.findUnique({
+					where : {
+						productid : productid
+					},
+					select :{
+						productid : true ,
+						productname : true ,
+						price : true ,
+						imageurl : true 
+					}
+				    })
+
+				    return {
+					productid : value.productid ,
+					productname : value.productname,
+					price : value.price ,
+					imageurl : value.imageurl
+				    }
+				}catch{
+					alert("no data available on the product ")
+				}
+			}
+	        return {
 			       productid : product.productid,
 			       productname : product.productname,
 			       price : product.price ,
 			       imageurl : product.imageurl
-		       });
+		       };
 
 		},
 		cart:async(_:any , args:{userid : string})=>{
@@ -142,9 +168,23 @@ export const resolvers ={
 			const {productid} =  args ;
 			const types =  await ProductRepository.search()
 			                     .where("productid").equal(productid)
-								 .returnAll() as Product[];
-			
-			return types
+								 .return.first() as Product[];
+			if(types){
+				const result  =  types[0]
+				return result 
+			}else{
+				const search =  await prisma.product.findUnique({
+					where : {
+						productid : productid
+					},
+					select : {
+						productType : true ,
+						productSubtype : true
+					}
+				})
+
+				return search 
+			}
 		},
 		fuzzysearch:async(_:any , agrs : {productname : string})=>{
 			const {productname}  = agrs;
@@ -196,13 +236,57 @@ export const resolvers ={
 			if(cursor){
 							const sortagain = sort.findIndex(p=> p.productid === cursor)
 							if (sortagain !== -1){
-								list= sort.slice(sortagain+10);
+								list= sort.slice(sortagain+1);
 							}
 			}
-			const result  =  list.slice(0,20);
+			let result  =  list.slice(0,20);
+			if(products.length<=0){
+			     result =  await prisma.product.findMany({
+					where:{
+						OR:[
+							{productSubtype : {contains : productname ,  mode :"insensitive"}},
+							{productname : {equals : productname ,  mode: "insensitive" }},
+							{productType : {equals : productname , mode:"insensitive"}}
+						]
+					},
+					orderBy : {
+						productinterections : "desc"
+					} ,
+
+					cursor:{
+						productid: cursor
+					},
+
+					take: 20
+				});
+			}
 			const newcursor =  result.length>0 ? result[result.length -1].productid : null ;
 
 			return {result , newcursor}
+		},
+		productdetail:async(_:any , args:{productid : string , cursor :string})=>{
+			const {productid , cursor} = args;
+
+			const search =  await ProductRepository.search()
+			                      .where("productid")
+								  .equal(productid)
+								  .return.first() as Product[]
+			if(search){
+				const value = search[0]
+				return value
+			}else{
+				try {
+					const search =  await prisma.product.findUnique({
+						where:{
+							productid : productid
+						}
+					})
+					return search
+				}catch{
+					alert("can't get the data right now ")
+				}
+			}
+
 		}
     },
 	Mutation:{

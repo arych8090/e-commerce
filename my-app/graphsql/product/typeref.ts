@@ -23,7 +23,8 @@ type Query{
 	typesinterections( userid: String!) : typesinterections
 	producttypes(productid : String!):producttype
 	fuzzysearch(productname : String!):fuzzysearch
-	search(productname : String!):search
+	search(productname : String! , cursor : String!):search
+	productdetail(productid : String! , cursor : String!):productdetail
 },
 
 type Mutation{

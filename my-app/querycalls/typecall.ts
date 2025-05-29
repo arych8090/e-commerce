@@ -3,8 +3,7 @@ export async function typecall({productid} : {productid : string }){
     query producttypes($productid: string!){
        producttypes(productid: $productid){
           types 
-          subtypes 
-          price 
+          subtypes  
        }
     }`;
 

@@ -8,6 +8,7 @@ import { timeoutcall } from '@/querycalls/timeoutsearch';
 import { searchcall } from '@/querycalls/searchcall';
 import {redis} from "@/redisclusters/rediscluter";
 import { Product } from '@/interfaces/interface';
+import { productdetail } from '@/querycalls/productdetail';
 
 
 const session = await getServerSession(authOptions)
@@ -16,7 +17,7 @@ app.post("/interection" , async(req , res)=>{
     const { productid } : {productid:string} = req.body;
     const userid : string  = session.user.id;
 
-    const { types, subtypes, price } = await typecall({productid});
+    const { types, subtypes} = await typecall({productid});
 
     const producer = kafka.producer();
     await producer.connect();
@@ -85,10 +86,10 @@ app.get("/timeoutcall" , async (req ,  res)=>{
 
 app.get("/product" , async(req,res)=>{
     const query =  req.query as {product?: string , cursor?: string}
-    const productname = query.product || "";
+    const productid = query.product || "";
     const cursor = query.cursor || "";
 
-    const search  :Product[] =  await searchcall({ productname , cursor});
+    const search  :Product[] =  await productdetail({ productid , cursor});
 
     return res.status(200).json(search)
 })
