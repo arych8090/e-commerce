@@ -29,6 +29,10 @@ io.on("connection" , (socket:Socket)=>{
             console.log("the group for the productid is made" , productid)
             resetuserTimer(socket)
         });
+    
+        socket.on("reconnect" , ()=> {
+            resetuserTimer(socket)
+        })
 
     socket.on(`productstocks` , (stockinfo : {productid : string , stock : number})=>{
         const {productid , stock} = stockinfo; //not yet used 

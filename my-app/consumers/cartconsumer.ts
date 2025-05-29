@@ -34,7 +34,7 @@ export const consumercart = async () => {
 				parse.push({productid ,productname ,price , imageurl ,quantity})
 				socket.emit("subscribe-products" , productid )
 			}
-			await redis.set(key , JSON.stringify(parse))
+			await redis.set(key , JSON.stringify(parse) , "EX" , 172800 )
 			console.log('Data saved in Redis for:', userid);
 		}
 	});

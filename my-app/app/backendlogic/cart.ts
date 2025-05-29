@@ -6,6 +6,7 @@ import { authOptions } from '../lib/auth';
 import { getServerSession } from 'next-auth';
 import {loadStripe} from '@stripe/stripe-js';
 import { redis } from '@/redisomserver/mainredis';
+import socket from '@/websockets/socket'
 
 const session = await  getServerSession(authOptions)
 const stripePromise = loadStripe('')
@@ -79,3 +80,12 @@ app.get("/checkoutsession" , async (req , res)=>{
 	}
 })
 
+app.get("/cart" , async (req , res)=>{
+	const userid =  session.user.id ;
+	socket.send("reconnnect")
+	const key = `cart-${userid}`
+	const value = await redis.get(key)
+	const parse : {productid : string  , productname : string , price : number , imageurl : string , quantity : number}[]= JSON.parse(value || "[]");
+	const reset =  await redis.set(key, JSON.stringify(parse) ,"EX" ,172800 );
+	return res.status(200).json(parse)
+})
