@@ -1,8 +1,6 @@
 import express from 'express';
 import sgMail from "@sendgrid/mail";
-import { redis } from '@/redisclusters/rediscluter'; 
-import { getToken } from 'firebase/messaging';
-import messaging from './firebase';
+
 
 const app =  express();
 
@@ -31,21 +29,4 @@ app.post("/sendgrid" , async(req , res)=>{
         console.error(error.response?.body?.errors || error.message || error);
         return false;
      }
-})
-
-app.post("/firebase" , async(req,res)=>{
-    const userid  =  req.body as string
-    
-    const token = await getToken(messaging ,{vapidKey : "BK5tuhyuQ49kReBjkWto2fdGWrWV-JOfI63Eo0VIYX3SlKp33z9286nNwe8i7mLR4lrLcR3sAyEfrisydGPHILQ"})
-    const key =  `token-${userid}`;
-    const value =  await redis.get(key);
-    const parse : {userid:string , token : string}  =  JSON.parse(value || "{}")
-
-    if(parse.token === token){
-        return res.status(200).send(true)
-    }else{
-        parse.token = token ,
-        parse.userid = userid,
-        await redis.set(key , JSON.stringify(parse))
-    }
 })
