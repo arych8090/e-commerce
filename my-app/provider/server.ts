@@ -1,6 +1,5 @@
 import express from "express";
 import {kafka} from "@/kafkaserver/server";
-
 const app =  express();
 const port =  2000 ;
 

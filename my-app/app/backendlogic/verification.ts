@@ -20,7 +20,7 @@ app.get("/verification" , async(req , res)=>{
     }
 })
 
-app.post("generateotp" , async(req , res)=>{
+app.post("/generateotp" , async(req , res)=>{
     const {email} = req.query as {email : string}
     const otp = Math.floor(100000 + Math.random() * 900000);
     const key = `otp=${email}`;
