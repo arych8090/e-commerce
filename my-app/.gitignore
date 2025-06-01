@@ -39,16 +39,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-{
-  "type": "service_account",
-  "project_id": "commerce-281eb",
-  "private_key_id": "b6ba7f38412c59956222daf7199d7c0896bd865e",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDV9kvKCffCbgaK\nA9mYOkXFS2+sMStJXbYUi66niCtqm/fGsE7d96nsqenYDj0xoaKMAFhrLaBNfsdz\ntakVTAAjeiUN45sEIT+aJyNht99OUDqkLwFV3k990irScMeIKhGV/Ul+YMUprBBb\nd6sJ/Kw1LSY9KJslSK7gVYoNUDQkiOgpnRnlwlPl5mfZDwZwfJ0uLSQHP+vuVfDr\niHnB70r1VwKOP8dPrxq8hBSBuFMGRMVjwnYBBI1ThpvUEtw+GYzbF6xD/Ql1E6ew\nmvIo06sY5GLn7Z3bJT/vVH8FpKXkOwesgMVUAp650TXPkza6/lx+uKVp8S4HgZpe\nALE8SOMnAgMBAAECggEAGdNpUYFDgRnzuxv820WJX2ecGp4yud/QVwmHMtyaVPtv\nfHGSi3NV9OWLftM1KrT2YEy4X3N56nC3lW1jc9khGScoqtUCxIxY13wK5sQhdZv0\ngBXWZO15Ddhc59rKEtL1HXQdt13p3n5Q2SGIKSPxC1ggSfiJRYZQ6W4ZxEKekJwn\nXOL2S+UlxnLiLfIeTdeIz3VWsFBCYRSCgxGUU8MZ/rHMrCLfixHdxhdzdW1dUQAg\nJKsRvpauAH/cniPDqyYG36KKr6ovuCPaiKGEZZ8HvaHxm6aHGm5uahk+XfFqyEAB\njxld3PzB55eq4wsLMjqs+uCWXEf/5ELURcw13LungQKBgQDs6NARoknxGZeDcv+A\nAvl3vOkmx/67zSF0deUZWz8OqZfJ9euhnFMjqd6v96Z16+KX/lY9x1cVYJEb2tfO\nm+u0LuWCbPvB6ChC8lnrnP1UjXyxuA7mPjCC3C5s0bxv9DVJpIK50WA/XDQdVUUR\nmRnVHbaXegLv6c+9COhjmQw0gQKBgQDnNBq+awCXoEIfBy6A8ZZIklnYVU+hpRFa\nq8bltJ5Y4NAu31A5xFYIIQYSnmYcQxCBzZbcBU1VitrMIzlotAEWxSp/2fyGqX4q\nffLvXts6rPE9PzSIfssgP1FbQQlwcVkY0c30x9pQVp8BcgGyuUU0JFv/P8W4QhQp\nyJygY6UjpwKBgGTGrCu0I0wCHOd3taPYoBIFNBChJoTwv3hw5iGhJPOxxLXOfItk\nmiEjk2y7Jf4nd148fKcO8sZPK6rzrrVesicVg9+1SGq1vNqtiP6m60RaY16d8wiS\nD8S6sKztkwD0mu5Wop00qYKKUEjiCt1viQOU/iT1a+ZuSUYaUfB8HCsBAoGAFJIf\nOwf8MoFwwJ/79D8KdwSGd+gHQMOWCrIz7SYn3JKME0+NLMaaPPjrOGbdgPA6nMH1\nBTh3i//hvb34kqdJXYRHZr63aCfWcONp5QBUkyDmCeQAwZA+dG0NyQe9VkLPgZTR\nNVE+zF0YoqFJI2S2kpAVm11KMz21243c2axj+gsCgYEAmcnwzS3ToAiOjNamue2Y\n0lyv38Fvctvn8ZD+ZYTR47v8rBJP9fcbHKJNQQs129P0qZ9r0yE8omTVz4AG6ZK4\n6NZU0jWwVY1LiZpCriXLkvgK3O+8DJ9BMKpBa7gHs6jnXZdhlJ15fmzwzcsUtylY\nalMI9Yd3lRdhTvCe0CY/kGg=\n-----END PRIVATE KEY-----\n",
-  "client_email": "firebase-adminsdk-fbsvc@commerce-281eb.iam.gserviceaccount.com",
-  "client_id": "101534231180014524817",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40commerce-281eb.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
-}
+
+/services/main.json
