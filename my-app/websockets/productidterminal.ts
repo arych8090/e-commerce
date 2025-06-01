@@ -1,6 +1,9 @@
 
 import { Socket } from "socket.io";
 import { io } from "./backsocket";
+import { admin , db } from "@/services/firebase-admin";
+import { error } from "console";
+
 
 const userTimer = new Map<string, NodeJS.Timeout>();
 
@@ -46,26 +49,50 @@ io.on("connection" , (socket:Socket)=>{
         io.to(`product-${productid}`).emit("pricelistener" , {productid , price})
     })
 
-    socket.on("leavegroup" , ()=>{ //not yet used 
+    socket.on("leavegroup" , async(message)=>{ //not yet used 
+        const {userid} =  message as {userid : string}
         for(const room in socket.rooms){
            if(room !== socket.id){
             socket.leave(room)
            }
         }
+        const data = await db.collection("userid").get();
+        const value =  await data.docs.map(docs =>({
+            id: docs.id ,
+            ...docs.data()
+        }))
+        const search = value.find((t)=> t.id == userid);
+        const grps  = [...search.groups];
+        for( const group of grps){
+            admin.messaging().unsubscribeFromTopic(search.token , group)
+                 .catch(error=>{
+                    console.log("error removing the group" , group)
+                 })
+            
+        }
     })
 
     socket.on("types" ,  (message)=>{
-        const {type , subtype} =  message;
-        socket.join(`type-${type}-${subtype}`)
+        const {type , subtype , token} =  message;
+        socket.join(`type-${type}-${subtype}`);
+        admin.messaging().subscribeToTopic(token , `type-${type}-${subtype}`)
+              .catch(error=>{
+                console.log(error)
+              })
     })
 
     socket.on("price" ,  (message)=>{
-        const {price , type  , subtype } = message;
+        const {price , type  , subtype } = message as {price :  number  , type :  string ,  subtype : string };
         io.to(`type-${type}-${subtype}`).emit("notication" , {type ,subtype,price})
     })
 
     socket.on("stock" ,  (message)=>{
-        const {stock, type  , subtype } = message;
+        const {stock, type  , subtype } = message as {stock  :number , type  :  string  ,  subtype :  string};
         io.to(`type-${type}-${subtype}`).emit("notication" , {type ,subtype,stock})
+    })
+
+    socket.on("flashsale" , (message)=>{
+        const {productname , type , subtype  , price  , detail} = message as {productname : string , type : string , subtype : string  , price : number  , detail :  string};
+        io.to(`type-${type}-${subtype}`).emit("notification" , {productname , type , subtype  , price  , detail})
     })
 })
