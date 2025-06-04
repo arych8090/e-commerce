@@ -31,11 +31,12 @@ export const consumercart = async () => {
 			if(search){
 				search.quantity += 1
 			}else{
-				parse.push({productid ,productname ,price , imageurl ,quantity})
+				parse.push({productid ,productname ,price , imageurl ,quantity});
+				await redis.set(key , JSON.stringify(parse) , "EX" , 172800 )
+				await redis.zadd('cart-notification' , userid , Date.now()+172800000 )
+			    console.log('Data saved in Redis for:', userid);
 				socket.emit("subscribe-products" , productid )
 			}
-			await redis.set(key , JSON.stringify(parse) , "EX" , 172800 )
-			console.log('Data saved in Redis for:', userid);
 		}
 	});
 };
