@@ -6,14 +6,15 @@ import { authOptions } from '../lib/auth';
 import { getServerSession } from 'next-auth';
 import {loadStripe} from '@stripe/stripe-js';
 import { redis } from '@/redisomserver/mainredis';
-import socket from '@/websockets/socket'
+import socket from '@/websockets/socket';
+import { cleancartmake  , cleancartitem , cleansearch } from '@/interfaces/typedic' ;
 
 const session = await  getServerSession(authOptions)
 const stripePromise = loadStripe('')
 app.post("/productvalue" , async(req , res)=>{
 	const {productid} : {productid : string} = await req.body;
 	const userid : {userid:string} = session.user.id;
-	const productvalues : {productid : string , productname: string , price : number  ,imageurl : string , quantity : 1} = await cartsearch({productid});4
+	const productvalues : cleancartmake = await cartsearch({productid});
 	const variables = { ...productvalues , ...userid};
     const sendvalues = async()=>{
 		        const producer =  kafka.producer();
@@ -35,12 +36,12 @@ app.post("/productvalue" , async(req , res)=>{
 app.get("/checkoutsession" , async (req , res)=>{
 	const {userid} = await req.body;
 
-	const cart : {productid : string ,  productname:string , price:number, imageurl : string , quantity : number}[] = await checkoutcall(userid);
+	const cart : cleansearch[] = await checkoutcall(userid);
 	const search  =  await Promise.all(cart.map(async(items)=>{
 		const key = `stock-${items.productid}`
 		const data = await redis.get(key);
-		const parse : {productid : string , stock : number , price : number , sale : number , type : string , subtype : string }  =  JSON.parse(data || "{}")
-		const check = parse.stock - items.quantity ;
+		const parse : cleancartitem =  JSON.parse(data || "{}")
+		const check = parse.stockleft - items.quantity ; // see how to do undefined stocks 
 		const available =  check > 0 ;
 		return {
 			...parse ,
@@ -58,7 +59,7 @@ app.get("/checkoutsession" , async (req , res)=>{
 	if(unavailable.length > 0){
 		const key =  `cart-${userid}`
 		const set  = await Promise.all(available.map(async(items)=>{
-		       const value : {productid : string  , productname : string  , price  : number  ,  imageurl : string , quantity : number }= {productid : items.productid , productname : items.productname  , price : items.price , imageurl : items.imageurl ,quantity : items.quantity};
+		       const value : cleansearch= {productid : items.productid , productname : items.productname  , price : items.price , imageurl : items.imageurl ,quantity : items.quantity};
 		       return value
 	       }))
 		await redis.set(key , JSON.stringify(set) )
@@ -85,7 +86,7 @@ app.get("/cart" , async (req , res)=>{
 	socket.send("reconnnect")
 	const key = `cart-${userid}`
 	const value = await redis.get(key)
-	const parse : {productid : string  , productname : string , price : number , imageurl : string , quantity : number}[]= JSON.parse(value || "[]");
+	const parse : cleansearch[]= JSON.parse(value || "[]");
 	const reset =  await redis.set(key, JSON.stringify(parse) ,"EX" ,172800 );
 	if(!value){
 		return res.status(200).json({
